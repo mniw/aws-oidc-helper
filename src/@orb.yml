@@ -1,0 +1,11 @@
+version: 2.1
+
+description: >
+  This Orb help circleci workflow to assume IAM role with OpenID Connect(OIDC).
+
+display:
+  source_url: "https://github.com/mniw/aws-oidc-helper"
+
+orbs:
+  aws-cli: circleci/aws-cli@3.1.4
+  continuation: circleci/continuation@0.2.0

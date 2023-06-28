@@ -1,0 +1,22 @@
+description: >
+  This command enable workflow to assume IAM role with OIDC.
+
+parameters:
+  aws_role_arn:
+    type: env_var_name
+    default: AWS_ROLE_ARN
+    description: "IAM role ARN for CircleCI to assume"
+  aws_region:
+    type: env_var_name
+    default: AWS_DEFAULT_REGION
+    description: "AWS region in which you login ECR repository"
+  session_duration_seconds:
+    type: string
+    default: "3600"
+    description: "time limit of assumed role"
+steps:
+  - aws-cli/setup:
+      role-arn: << parameters.aws_role_arn >>
+      aws-region: << parameters.aws_region >>
+      role-session-name: "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}"
+      session-duration: << parameters.session_duration_seconds >>

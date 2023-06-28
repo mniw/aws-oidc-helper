@@ -1,0 +1,44 @@
+description: >
+  Use image in ECR and build.
+
+usage:
+  version: 2.1
+  setup: << pipeline.parameters.is-setup >>
+  parameters:
+    is-setup:
+      type: boolean
+      default: true
+    ecr-password:
+      type: string
+      default: ""
+  orbs:
+    aws-oidc-helper: mniw/aws-oidc-helper@0.0.1
+  jobs:
+    build:
+      docker:
+      - image: (aws-account-id).dkr.ecr.ap-northeast-1.amazonaws.com/ci_image:latest
+        auth:
+          username: AWS
+          password: << pipeline.parameters.ecr-password >>
+      environment:
+        AWS_DEFAULT_REGION: ap-northeast-1
+        AWS_ROLE_ARN: arn:aws:iam::(aws-account-id):role/role-for-circleci-oidc
+      steps:
+      - checkout
+      - aws-oidc-helper/assume-role
+      - run: your necessary build process
+  workflows:
+    version: 2
+    setup:
+      when: << pipeline.parameters.is-setup >>
+      jobs:
+        - aws-oidc-helper/get-and-pass-ecr-password:
+            context:
+              - aws-oidc-context
+    build:
+      when:
+        not: << pipeline.parameters.is-setup >>
+      jobs:
+        - build:
+            context:
+              - aws-oidc-context

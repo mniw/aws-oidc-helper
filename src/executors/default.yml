@@ -1,0 +1,6 @@
+docker:
+  - image: 'cimg/aws:<<parameters.tag>>'
+parameters:
+  tag:
+    default: "2022.06"
+    type: string
