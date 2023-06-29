@@ -3,8 +3,7 @@ description: >
 
 parameters:
   aws_role_arn:
-    type: env_var_name
-    default: AWS_ROLE_ARN
+    type: string
     description: "IAM role ARN for CircleCI to assume"
   aws_region:
     type: env_var_name
@@ -18,5 +17,5 @@ steps:
   - aws-cli/setup:
       role-arn: << parameters.aws_role_arn >>
       aws-region: << parameters.aws_region >>
-      role-session-name: "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}"
+      role-session-name: "CircleCI-${CIRCLE_WORKFLOW_ID}"
       session-duration: << parameters.session_duration_seconds >>

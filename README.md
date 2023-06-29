@@ -37,7 +37,8 @@ build:
         AWS_ROLE_ARN: arn:aws:iam::(aws-account-id):role/role-for-circleci-oidc
     steps:
         - checkout
-        - aws-oidc-helper/assume-role
+        - aws-oidc-helper/assume-role:
+            aws_role_arn: ${AWS_ROLE_ARN}
         - run: your necessary build process
 workflows:
 version: 2
@@ -45,6 +46,7 @@ setup:
     when: << pipeline.parameters.is-setup >>
     jobs:
         - aws-oidc-helper/get-and-pass-ecr-password:
+            aws_role_arn: ${AWS_ROLE_ARN}
             context:
                 - aws-oidc-context
 build:
